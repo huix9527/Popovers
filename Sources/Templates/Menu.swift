@@ -15,6 +15,8 @@ public extension Templates {
         public var presentationAnimation = Animation.spring(response: 0.3, dampingFraction: 0.7, blendDuration: 1)
         public var dismissalAnimation = Animation.spring(response: 0.4, dampingFraction: 0.9, blendDuration: 1)
         public var labelFadeAnimation = Animation.default /// The animation used when calling the `fadeLabel`.
+        public var popoverPresentationAnimation: Animation? /// Overrides the underlying popover's presentation animation.
+        public var popoverDismissalAnimation: Animation? /// Overrides the underlying popover's dismissal animation.
         public var clipContent = true /// Replicate the system's default clipping animation.
         public var sourceFrameInset = UIEdgeInsets(top: -8, left: -8, bottom: -8, right: -8)
         public var originAnchor = Popover.Attributes.Position.Anchor.bottom /// The label's anchor.
@@ -36,6 +38,8 @@ public extension Templates {
             presentationAnimation: Animation = .spring(response: 0.3, dampingFraction: 0.7, blendDuration: 1),
             dismissalAnimation: Animation = .spring(response: 0.4, dampingFraction: 0.9, blendDuration: 1),
             labelFadeAnimation: Animation = .easeOut,
+            popoverPresentationAnimation: Animation? = nil,
+            popoverDismissalAnimation: Animation? = nil,
             sourceFrameInset: UIEdgeInsets = .init(top: -8, left: -8, bottom: -8, right: -8),
             originAnchor: Popover.Attributes.Position.Anchor = .bottom,
             popoverAnchor: Popover.Attributes.Position.Anchor = .top,
@@ -54,6 +58,8 @@ public extension Templates {
             self.presentationAnimation = presentationAnimation
             self.dismissalAnimation = dismissalAnimation
             self.labelFadeAnimation = labelFadeAnimation
+            self.popoverPresentationAnimation = popoverPresentationAnimation
+            self.popoverDismissalAnimation = popoverDismissalAnimation
             self.sourceFrameInset = sourceFrameInset
             self.originAnchor = originAnchor
             self.popoverAnchor = popoverAnchor
@@ -223,6 +229,12 @@ public extension Templates {
                                     + configuration.excludedFrames()
                             }
                             $0.sourceFrameInset = configuration.sourceFrameInset
+                            if let popoverPresentationAnimation = configuration.popoverPresentationAnimation {
+                                $0.presentation.animation = popoverPresentationAnimation
+                            }
+                            if let popoverDismissalAnimation = configuration.popoverDismissalAnimation {
+                                $0.dismissal.animation = popoverDismissalAnimation
+                            }
                         }
                     ) {
                         MenuView(
