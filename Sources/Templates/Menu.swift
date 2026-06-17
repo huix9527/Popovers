@@ -493,15 +493,23 @@ public extension Templates {
 
                     /// Avoid limiting the frame of the content to ensure proper hit-testing (for popover dismissal).
                     .background(
-                        Templates.VisualEffectView(configuration.menuBlur)
-                            .cornerRadius(configuration.cornerRadius)
-                            .popoverShadow(shadow: configuration.shadow)
-                            .frame(height: expanded ? nil : context.frame.height / 3),
+                        menuBackground(height: expanded ? nil : context.frame.height / 3),
                         alignment: .top
                     )
             } else {
                 content
+                    .background(
+                        menuBackground(height: nil),
+                        alignment: .top
+                    )
             }
+        }
+
+        private func menuBackground(height: CGFloat?) -> some View {
+            Templates.VisualEffectView(configuration.menuBlur)
+                .cornerRadius(configuration.cornerRadius)
+                .popoverShadow(shadow: configuration.shadow)
+                .frame(height: height)
         }
     }
 }
