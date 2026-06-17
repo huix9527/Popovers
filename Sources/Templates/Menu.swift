@@ -22,6 +22,7 @@ public extension Templates {
         public var originAnchor = Popover.Attributes.Position.Anchor.bottom /// The label's anchor.
         public var popoverAnchor = Popover.Attributes.Position.Anchor.top /// The menu's anchor.
         public var scaleAnchor: Popover.Attributes.Position.Anchor? /// If nil, the anchor will be automatically picked.
+        public var initialScale = CGFloat(0.2) /// The scale the menu starts from when presenting and dismisses to.
         public var excludedFrames: (() -> [CGRect]) = { [] }
         public var menuBlur = UIBlurEffect.Style.prominent
         public var width: CGFloat? = CGFloat(240) /// If nil, hug the content.
@@ -44,6 +45,7 @@ public extension Templates {
             originAnchor: Popover.Attributes.Position.Anchor = .bottom,
             popoverAnchor: Popover.Attributes.Position.Anchor = .top,
             scaleAnchor: Popover.Attributes.Position.Anchor? = nil,
+            initialScale: CGFloat = 0.2,
             excludedFrames: @escaping (() -> [CGRect]) = { [] },
             menuBlur: UIBlurEffect.Style = .prominent,
             width: CGFloat? = CGFloat(240),
@@ -64,6 +66,7 @@ public extension Templates {
             self.originAnchor = originAnchor
             self.popoverAnchor = popoverAnchor
             self.scaleAnchor = scaleAnchor
+            self.initialScale = initialScale
             self.excludedFrames = excludedFrames
             self.menuBlur = menuBlur
             self.width = width
@@ -314,7 +317,7 @@ public extension Templates {
                 .frame(width: configuration.width)
                 .fixedSize() /// Hug the width of the inner content.
                 .modifier(ClippedBackgroundModifier(context: context, configuration: configuration, expanded: expanded)) /// Clip the content if desired.
-                .scaleEffect(expanded ? 1 : 0.2, anchor: configuration.scaleAnchor?.unitPoint ?? model.getScaleAnchor(from: context))
+                .scaleEffect(expanded ? 1 : configuration.initialScale, anchor: configuration.scaleAnchor?.unitPoint ?? model.getScaleAnchor(from: context))
                 .scaleEffect(model.scale, anchor: configuration.scaleAnchor?.unitPoint ?? model.getScaleAnchor(from: context))
                 .simultaneousGesture(
                     DragGesture(minimumDistance: 0, coordinateSpace: .global)
